@@ -1,27 +1,27 @@
 package com.lightbend.lagom.javadsl.discovery.consul
 
-import java.net.{ InetAddress, URI }
+import java.net.{InetAddress, URI}
 import java.util.Optional
 import java.util.concurrent.TimeUnit
 
 import com.ecwid.consul.v1.agent.model.NewService
-import com.ecwid.consul.v1.{ ConsulClient, QueryParams }
-import com.lightbend.lagom.internal.client.CircuitBreakers
-import org.scalatest.{ Matchers, WordSpecLike }
-import play.api.{ Configuration, Environment }
+import com.ecwid.consul.v1.{ConsulClient, QueryParams}
+import com.lightbend.lagom.internal.javadsl.client.CircuitBreakersPanelImpl
+import org.scalatest.{Matchers, WordSpecLike}
+import play.api.{Configuration, Environment}
 
 import scala.collection.JavaConverters._
 
 class ConsulServiceDiscoverySpec extends WordSpecLike with Matchers {
-  val config = Configuration.load(Environment.simple())
+  val config: Configuration = Configuration.load(Environment.simple())
   val testTimeoutInSeconds: Long = 5
-  val localAddress = InetAddress.getLoopbackAddress.getHostAddress
+  val localAddress: String = InetAddress.getLoopbackAddress.getHostAddress
 
 
   def withServiceDiscovery(testCode: ConsulServiceLocator => ConsulClient => Any): Unit = {
     import scala.concurrent.ExecutionContext.Implicits._
     val client = new ConsulClient("localhost")
-    val cbs: CircuitBreakers = new CircuitBreakers(null, null, null)
+    val cbs = new CircuitBreakersPanelImpl(null, null, null)
     val locator = new ConsulServiceLocator(client, new ConsulConfig.ConsulConfigImpl(config), cbs)
     testCode(locator)(client)
   }

@@ -18,7 +18,7 @@ trait ConsulConfig {
 
 object ConsulConfig {
 
-  @Singl
+  @Singleton
   class ConsulConfigImpl @Inject()(config: Configuration) extends ConsulConfig {
     override val agentHostname = config.get[String]("lagom.discovery.consul.agent-hostname")
     override val agentPort = config.get[Int]("lagom.discovery.consul.agent-port")

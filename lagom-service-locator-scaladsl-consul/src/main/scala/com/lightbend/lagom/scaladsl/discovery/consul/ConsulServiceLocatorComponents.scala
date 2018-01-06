@@ -25,6 +25,6 @@ trait ConsulServiceLocatorComponents extends CircuitBreakerComponents {
   lazy val consulConfig = new ConsulConfig.ConsulConfigImpl(configuration)
   lazy val consulClient: ConsulClient = new ConsulClient(consulConfig.agentHostname, consulConfig.agentPort)
 
-  lazy val serviceLocator: ServiceLocator = new ConsulServiceLocator(consulClient, consulConfig, circuitBreakers)(executionContext)
+  lazy val serviceLocator: ServiceLocator = new ConsulServiceLocator(consulClient, consulConfig, circuitBreakersPanel)(executionContext)
 }
 
