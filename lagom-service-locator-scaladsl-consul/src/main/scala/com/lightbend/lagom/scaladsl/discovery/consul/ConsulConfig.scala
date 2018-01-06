@@ -12,10 +12,10 @@ trait ConsulConfig {
 
 object ConsulConfig {
   class ConsulConfigImpl  (config: Configuration) extends ConsulConfig {
-    override val agentHostname = config.getString("lagom.discovery.consul.agent-hostname").get
-    override val agentPort = config.getInt("lagom.discovery.consul.agent-port").get
-    override val scheme = config.getString("lagom.discovery.consul.uri-scheme").get
-    override val routingPolicy = RoutingPolicy(config.getString("lagom.discovery.consul.routing-policy").get)
+    override val agentHostname: String = config.get[String]("lagom.discovery.consul.agent-hostname")
+    override val agentPort: Int = config.get[Int]("lagom.discovery.consul.agent-port")
+    override val scheme: String = config.get[String]("lagom.discovery.consul.uri-scheme")
+    override val routingPolicy = RoutingPolicy(config.get[String]("lagom.discovery.consul.routing-policy"))
   }
 }
 

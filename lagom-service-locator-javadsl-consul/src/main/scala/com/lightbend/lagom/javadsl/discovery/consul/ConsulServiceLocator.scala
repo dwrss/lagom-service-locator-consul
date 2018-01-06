@@ -1,25 +1,23 @@
 package com.lightbend.lagom.javadsl.discovery.consul
 
-import java.net.{ InetAddress, URI }
+import java.net.{InetAddress, URI}
 import java.util.Optional
-import java.util.concurrent.{ CompletionStage, ThreadLocalRandom }
-import java.util.function.{ Function => JFunction }
+import java.util.concurrent.{CompletionStage, ThreadLocalRandom}
+import java.util.function.{Function => JFunction}
 import javax.inject.Inject
 
 import com.ecwid.consul.v1.catalog.model.CatalogService
-import com.ecwid.consul.v1.{ ConsulClient, QueryParams }
-import com.lightbend.lagom.internal.client.CircuitBreakers
+import com.ecwid.consul.v1.{ConsulClient, QueryParams}
 import com.lightbend.lagom.javadsl.api.Descriptor
-import com.lightbend.lagom.javadsl.client.CircuitBreakingServiceLocator
+import com.lightbend.lagom.javadsl.client.{CircuitBreakersPanel, CircuitBreakingServiceLocator}
 
 import scala.collection.JavaConverters._
-import scala.collection.concurrent.{ Map, TrieMap }
+import scala.collection.concurrent.{Map, TrieMap}
 import scala.compat.java8.FutureConverters._
 import scala.compat.java8.OptionConverters._
+import scala.concurrent.{ExecutionContext, Future}
 
-import scala.concurrent.{ ExecutionContext, Future }
-
-class ConsulServiceLocator @Inject()(client: ConsulClient, config: ConsulConfig, circuitBreakers: CircuitBreakers)(implicit ec: ExecutionContext)
+class ConsulServiceLocator @Inject()(client: ConsulClient, config: ConsulConfig, circuitBreakers: CircuitBreakersPanel)(implicit ec: ExecutionContext)
   extends CircuitBreakingServiceLocator(circuitBreakers) {
 
   private val roundRobinIndexFor: Map[String, Int] = TrieMap.empty[String, Int]
@@ -48,7 +46,7 @@ class ConsulServiceLocator @Inject()(client: ConsulClient, config: ConsulConfig,
 
   private[consul] def pickFirstInstance(services: List[CatalogService]): URI = {
     if (services.isEmpty) throw new IllegalStateException("List of services should not be empty")
-    toURIs(services).sorted.head
+    toURIs(services).min
   }
 
   private[consul] def pickRandomInstance(services: List[CatalogService]): URI = {
@@ -62,7 +60,7 @@ class ConsulServiceLocator @Inject()(client: ConsulClient, config: ConsulConfig,
     val sortedServices = toURIs(services).sorted
     val currentIndex = roundRobinIndexFor(name)
     val nextIndex =
-      if (sortedServices.size > currentIndex + 1) currentIndex + 1
+      if (sortedServices.lengthCompare(currentIndex + 1) > 0) currentIndex + 1
       else 0
     roundRobinIndexFor.replace(name, nextIndex)
     sortedServices.apply(currentIndex)

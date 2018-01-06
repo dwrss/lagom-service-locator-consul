@@ -18,16 +18,16 @@ trait ConsulConfig {
 
 object ConsulConfig {
 
-  @Singleton
+  @Singl
   class ConsulConfigImpl @Inject()(config: Configuration) extends ConsulConfig {
-    override val agentHostname = config.getString("lagom.discovery.consul.agent-hostname").get
-    override val agentPort = config.getInt("lagom.discovery.consul.agent-port").get
-    override val scheme = config.getString("lagom.discovery.consul.uri-scheme").get
-    override val routingPolicy = RoutingPolicy(config.getString("lagom.discovery.consul.routing-policy").get)
-    override val serviceName = config.getString("lagom.register.serviceName").get
-    override val serviceId = config.getString("lagom.register.serviceId").get
-    override val serviceAddress = config.getString("lagom.register.serviceAddress").get
-    override val servicePort = config.getInt("lagom.register.servicePort").get
+    override val agentHostname = config.get[String]("lagom.discovery.consul.agent-hostname")
+    override val agentPort = config.get[Int]("lagom.discovery.consul.agent-port")
+    override val scheme = config.get[String]("lagom.discovery.consul.uri-scheme")
+    override val routingPolicy = RoutingPolicy(config.get[String]("lagom.discovery.consul.routing-policy"))
+    override val serviceName = config.get[String]("lagom.register.serviceName")
+    override val serviceId = config.get[String]("lagom.register.serviceId")
+    override val serviceAddress = config.get[String]("lagom.register.serviceAddress")
+    override val servicePort = config.get[Int]("lagom.register.servicePort")
   }
 
 }

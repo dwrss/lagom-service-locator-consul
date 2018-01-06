@@ -4,13 +4,13 @@ organization := "com.lightbend.lagom"
 
 name := "lagom-service-locator-consul"
 
-val lagomVersion = "1.3.5"
+val lagomVersion = "1.4.0-RC1"
 
 val typesafeConfig = "com.typesafe" % "config" % "1.3.1"
 val lagomJavadslClient = "com.lightbend.lagom" %% "lagom-javadsl-client" % lagomVersion
 val lagomScaladslClient = "com.lightbend.lagom" %% "lagom-scaladsl-client" % lagomVersion
 val consulApi = "com.ecwid.consul" % "consul-api" % "1.1.10"
-val scalatest = "org.scalatest" %% "scalatest" % "3.0.1" % Test
+val scalatest = "org.scalatest" %% "scalatest" % "3.0.4" % Test
 
 lazy val `lagom-service-locator-consul` = (project in file("."))
   .aggregate(
@@ -19,8 +19,8 @@ lazy val `lagom-service-locator-consul` = (project in file("."))
   )
 
 def common = Seq(
-  scalaVersion := "2.11.11",
-  version := "1.4.0-SNAPSHOT"
+  scalaVersion := "2.12.4",
+  version := "2.0.0-SNAPSHOT"
 )
 
 lazy val `lagom-service-locator-javadsl-consul` = (project in file("lagom-service-locator-javadsl-consul"))
