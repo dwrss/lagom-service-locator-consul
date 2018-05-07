@@ -2,7 +2,7 @@ import sbt.Keys.{licenses, version}
 
 name := "lagom-service-locator-consul"
 
-val lagomVersion = "1.4.0"
+val lagomVersion = "1.4.4"
 
 val typesafeConfig = "com.typesafe" % "config" % "1.3.1"
 val lagomJavadslClient = "com.lightbend.lagom" %% "lagom-javadsl-client" % lagomVersion
@@ -19,8 +19,8 @@ lazy val `lagom-service-locator-consul` = (project in file("."))
 common
 
 def common = Seq(
-  scalaVersion := "2.12.4",
-  version := "2.0.1",
+  scalaVersion := "2.12.6",
+  version := "2.0.2",
   organization := "com.lightbend.lagom",
   licenses += ("Apache-2.0", url("http://apache.org/licenses/LICENSE-2.0")),
   bintrayRepository := "lagom"
